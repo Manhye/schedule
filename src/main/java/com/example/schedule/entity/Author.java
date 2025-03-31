@@ -2,8 +2,10 @@ package com.example.schedule.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "author")
 public class Author extends BaseEntity{
@@ -34,5 +36,8 @@ public class Author extends BaseEntity{
         this.password=password;
         this.age = age;
     }
+
+
+
 
 }
