@@ -1,7 +1,7 @@
 package com.example.schedule.service;
 
 import com.example.schedule.dto.CreateScheduleRequestDto;
-import com.example.schedule.dto.CreateScheduleResponseDto;
+import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Author;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.repository.AuthorRepository;
@@ -11,13 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
     private final AuthorRepository authorRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public CreateScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto) {
+    public ScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto) {
         Author foundAuthor = findAuthorByEmailOrElseThrow(requestDto.getEmail());
 
         Schedule schedule = new Schedule(
@@ -30,7 +32,7 @@ public class ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new CreateScheduleResponseDto(schedule.getId(),schedule.getTitle(), schedule.getContents(), schedule.getScheduledDate(), foundAuthor.getEmail());
+        return new ScheduleResponseDto(schedule.getId(),schedule.getTitle(), schedule.getContents(), schedule.getScheduledDate(), foundAuthor.getEmail());
 
     }
 
@@ -41,5 +43,39 @@ public class ScheduleService {
                                 HttpStatus.NO_CONTENT, "Email Does not Exist. Email = " + email
                         )
                 );
+    }
+
+    public List<ScheduleResponseDto> findAll() {
+        return scheduleRepository.findAll().stream()
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule.getId(),
+                        schedule.getTitle(),
+                        schedule.getContents(),
+                        schedule.getScheduledDate(),
+                        schedule.getAuthor().getEmail()
+                )).toList();
+    }
+
+    public ScheduleResponseDto findById(Long id) {
+        Schedule foundSchedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NO_CONTENT, "ID Does Not Exist. ID = " + id
+                ));
+        Author author = foundSchedule.getAuthor();
+        return new ScheduleResponseDto(
+                foundSchedule.getId(),
+                foundSchedule.getTitle(),
+                foundSchedule.getContents(),
+                foundSchedule.getScheduledDate(),
+                author.getEmail()
+        );
+    }
+
+    public void delete(Long id) {
+        Schedule foundSchedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NO_CONTENT, "ID Does Not Exist. ID = " + id
+                ));
+        scheduleRepository.delete(foundSchedule);
     }
 }

@@ -52,9 +52,9 @@ public class AuthorController {
      * @return
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<UpdateInfoRequestDto> updateInfo(
-            @PathVariable @Valid Long id,
-            @RequestBody UpdateInfoRequestDto requestDto
+    public ResponseEntity<Void> updateInfo(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateInfoRequestDto requestDto
     ){
         authorService.updateInfo(id, requestDto);
 
