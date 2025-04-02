@@ -8,9 +8,7 @@ import com.example.schedule.exception.NoContentException;
 import com.example.schedule.repository.AuthorRepository;
 import com.example.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(schedule.getId(),schedule.getTitle(), schedule.getContents(), schedule.getScheduledDate(), foundAuthor.getEmail());
+        return new ScheduleResponseDto(savedSchedule.getId(),savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getScheduledDate(), foundAuthor.getEmail());
 
     }
 
