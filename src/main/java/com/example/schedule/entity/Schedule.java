@@ -2,9 +2,11 @@ package com.example.schedule.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Setter
 @Getter
 @Entity
 @Table(name = "schedule")
@@ -34,9 +36,6 @@ public class Schedule extends BaseEntity{
         this.title = title;
         this.contents=contents;
         this.scheduledDate=scheduledDate;
-    }
-    public void setAuthor(Author author){
-        this.author=author;
     }
 
 }

@@ -58,14 +58,18 @@ public class AuthorService {
 
         Author foundAuthor = findByIdOrElseThrow(id);
 
+        String oldPassword = requestDto.getOldPassword();
+        String newPassword = requestDto.getNewPassword();
+
+
         // 1️⃣ Authorizing
-        if(!foundAuthor.getPassword().equals(requestDto.getOldPassword())){
+        if(!passwordEncoder.matches(oldPassword, foundAuthor.getPassword())){
             throw new InvalidPasswordException("Incorrect Password");
         }
 
         // 2️⃣ Updates Password if New Password is Typed.
         if (requestDto.getNewPassword() != null && !requestDto.getNewPassword().isBlank()) {
-            foundAuthor.setPassword(requestDto.getNewPassword());
+            foundAuthor.setPassword(passwordEncoder.encode(newPassword));
         }
 
         // 3️⃣ Updates Email if New Email is Typed and Not Duplicated.
@@ -92,8 +96,8 @@ public class AuthorService {
 
     public Author findByIdOrElseThrow(Long id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NO_CONTENT, "ID Does Not Exist. ID = " + id
+                .orElseThrow(() -> new NoContentException(
+                        "ID Does Not Exist. ID = " + id
                 ));
     }
 

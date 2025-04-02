@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class LoginSessionController {
 
     private final AuthorService authorService;
-    private final PasswordEncoder passwordEncoder;
 
 
     @GetMapping("/home")
