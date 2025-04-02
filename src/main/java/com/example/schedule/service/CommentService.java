@@ -8,7 +8,6 @@ import com.example.schedule.dto.UpdateCommentRequestDto;
 import com.example.schedule.entity.Author;
 import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
-import com.example.schedule.exception.ForbiddenException;
 import com.example.schedule.exception.NoContentException;
 import com.example.schedule.repository.AuthorRepository;
 import com.example.schedule.repository.CommentRepository;

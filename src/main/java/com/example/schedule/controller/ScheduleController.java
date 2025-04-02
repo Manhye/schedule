@@ -7,6 +7,7 @@ import com.example.schedule.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,10 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAll(){
-        List<ScheduleResponseDto> scheduleResponseDto = scheduleService.findAll();
+    public ResponseEntity<Page<ScheduleResponseDto>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+        Page<ScheduleResponseDto> scheduleResponseDto = scheduleService.findAll(page, size);
 
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
     }

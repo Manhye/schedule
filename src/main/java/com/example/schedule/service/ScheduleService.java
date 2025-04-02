@@ -16,6 +16,10 @@ import com.example.schedule.repository.ScheduleRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,15 +59,12 @@ public class ScheduleService {
                 );
     }
 
-    public List<ScheduleResponseDto> findAll() {
-        return scheduleRepository.findAll().stream()
-                .map(schedule -> new ScheduleResponseDto(
-                        schedule.getId(),
-                        schedule.getTitle(),
-                        schedule.getContents(),
-                        schedule.getScheduledDate(),
-                        schedule.getAuthor().getEmail()
-                )).toList();
+    public Page<ScheduleResponseDto> findAll(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "modified_at"));
+
+            return scheduleRepository.findAll(pageable)
+                .map(ScheduleResponseDto::new);
     }
 
     public ScheduleResponseDto findById(Long id) {
