@@ -1,6 +1,7 @@
 package com.example.schedule.controller;
 
 import com.example.schedule.common.Const;
+import com.example.schedule.config.PasswordEncoder;
 import com.example.schedule.dto.AuthorResponseDto;
 import com.example.schedule.dto.LoginRequestDto;
 import com.example.schedule.dto.LoginResponseDto;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class LoginSessionController {
 
     private final AuthorService authorService;
+    private final PasswordEncoder passwordEncoder;
+
 
     @GetMapping("/home")
     public String login(

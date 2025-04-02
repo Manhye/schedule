@@ -1,6 +1,7 @@
 package com.example.schedule.controller;
 
 
+import com.example.schedule.config.PasswordEncoder;
 import com.example.schedule.dto.AuthorResponseDto;
 import com.example.schedule.dto.SignUpRequestDto;
 import com.example.schedule.dto.SignUpResponseDto;

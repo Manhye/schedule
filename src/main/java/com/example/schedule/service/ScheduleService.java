@@ -18,6 +18,7 @@ public class ScheduleService {
     private final AuthorRepository authorRepository;
     private final ScheduleRepository scheduleRepository;
 
+
     public ScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto) {
         Author foundAuthor = findAuthorByEmailOrElseThrow(requestDto.getEmail());
 

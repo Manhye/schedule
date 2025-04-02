@@ -1,5 +1,6 @@
 package com.example.schedule.service;
 
+import com.example.schedule.config.PasswordEncoder;
 import com.example.schedule.dto.AuthorResponseDto;
 import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.SignUpResponseDto;
@@ -22,6 +23,8 @@ import java.util.Optional;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     public SignUpResponseDto signUp(String username, String password, String email, Integer age) {
 
@@ -29,6 +32,9 @@ public class AuthorService {
                 .ifPresent(author -> {
                     throw new EmailVerificationException("Email already in use");
                 });
+
+        password = passwordEncoder.encode(password);
+
         Author author = new Author(username, email, password, age);
 
         Author savedAuthor = authorRepository.save(author);
@@ -92,12 +98,14 @@ public class AuthorService {
     }
 
     public LoginResponseDto login(String email, String password) {
-        Author author = authorRepository.findIdByEmailAndPassword(email, password);
+        Author author = authorRepository.findIdByEmail(email);
 
         if(author == null){
             throw new InvalidPasswordException("Incorrect Email");
         }
-        if(!author.getPassword().equals(password)){
+
+
+        if(!passwordEncoder.matches(password, author.getPassword())){
             throw new InvalidPasswordException("Incorrect Password");
         }
 
