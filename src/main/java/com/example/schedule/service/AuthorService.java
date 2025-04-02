@@ -5,16 +5,16 @@ import com.example.schedule.dto.LoginResponseDto;
 import com.example.schedule.dto.SignUpResponseDto;
 import com.example.schedule.dto.UpdateInfoRequestDto;
 import com.example.schedule.entity.Author;
+import com.example.schedule.exception.EmailVerificationException;
+import com.example.schedule.exception.InvalidPasswordException;
+import com.example.schedule.exception.NoContentException;
 import com.example.schedule.repository.AuthorRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,7 +27,7 @@ public class AuthorService {
 
         authorRepository.findByEmail(email)
                 .ifPresent(author -> {
-                    throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+                    throw new EmailVerificationException("Email already in use");
                 });
         Author author = new Author(username, email, password, age);
 
@@ -40,7 +40,7 @@ public class AuthorService {
         Optional<Author> optionalAuthor = authorRepository.findById(id);
 
         if(optionalAuthor.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Author Does Not Exist.");
+            throw new NoContentException("Author Does Not Exist.");
         }
 
         Author foundAuthor = optionalAuthor.get();
@@ -54,7 +54,7 @@ public class AuthorService {
 
         // 1️⃣ Authorizing
         if(!foundAuthor.getPassword().equals(requestDto.getOldPassword())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect Password");
+            throw new InvalidPasswordException("Incorrect Password");
         }
 
         // 2️⃣ Updates Password if New Password is Typed.
@@ -66,7 +66,7 @@ public class AuthorService {
         if (requestDto.getEmail() != null && !requestDto.getEmail().isBlank() && !requestDto.getEmail().equals(foundAuthor.getEmail())) {
             boolean emailExists = authorRepository.existsByEmail(requestDto.getEmail());
             if (emailExists) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+                throw new EmailVerificationException("Email already in use");
             }
             foundAuthor.setEmail(requestDto.getEmail());
         }
@@ -95,10 +95,10 @@ public class AuthorService {
         Author author = authorRepository.findIdByEmailAndPassword(email, password);
 
         if(author == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Email");
+            throw new InvalidPasswordException("Incorrect Email");
         }
         if(!author.getPassword().equals(password)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
+            throw new InvalidPasswordException("Incorrect Password");
         }
 
         return new LoginResponseDto(author.getId());

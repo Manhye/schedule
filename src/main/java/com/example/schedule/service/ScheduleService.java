@@ -4,6 +4,7 @@ import com.example.schedule.dto.CreateScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Author;
 import com.example.schedule.entity.Schedule;
+import com.example.schedule.exception.NoContentException;
 import com.example.schedule.repository.AuthorRepository;
 import com.example.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +40,7 @@ public class ScheduleService {
     private Author findAuthorByEmailOrElseThrow(String email) {
         return authorRepository.findByEmail(email)
                 .orElseThrow(()->
-                        new ResponseStatusException(
-                                HttpStatus.NO_CONTENT, "Email Does not Exist. Email = " + email
-                        )
+                        new NoContentException("Email Does not Exist. Email = " + email)
                 );
     }
 
@@ -58,9 +57,7 @@ public class ScheduleService {
 
     public ScheduleResponseDto findById(Long id) {
         Schedule foundSchedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NO_CONTENT, "ID Does Not Exist. ID = " + id
-                ));
+                .orElseThrow(() -> new NoContentException("ID Does Not Exist. ID = " + id));
         Author author = foundSchedule.getAuthor();
         return new ScheduleResponseDto(
                 foundSchedule.getId(),
@@ -73,9 +70,7 @@ public class ScheduleService {
 
     public void delete(Long id) {
         Schedule foundSchedule = scheduleRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NO_CONTENT, "ID Does Not Exist. ID = " + id
-                ));
+                .orElseThrow(() -> new NoContentException("ID Does Not Exist. ID = " + id));
         scheduleRepository.delete(foundSchedule);
     }
 }
