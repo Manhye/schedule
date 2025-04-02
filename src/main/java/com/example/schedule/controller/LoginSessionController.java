@@ -33,7 +33,7 @@ public class LoginSessionController {
             return "login";
         }
 
-        AuthorResponseDto loginAuthor = (AuthorResponseDto) session.getAttribute(Const.LOGIN_USER);
+        AuthorResponseDto loginAuthor = (AuthorResponseDto) session.getAttribute(Const.LOGIN_AUTHOR);
 
 
         if(loginAuthor == null){
@@ -60,10 +60,19 @@ public class LoginSessionController {
 
         HttpSession session = request.getSession();
 
-        AuthorResponseDto loginUser = authorService.findById(userId);
+        AuthorResponseDto loginAuthor = authorService.findById(userId);
 
-        session.setAttribute(Const.LOGIN_USER, loginUser);
+        session.setAttribute(Const.LOGIN_AUTHOR, loginAuthor);
 
+        return "redirect:/home";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
         return "redirect:/home";
     }
 }

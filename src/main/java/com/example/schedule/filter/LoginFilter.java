@@ -34,13 +34,13 @@ public class LoginFilter implements Filter {
 
 
         if (!isWhiteList(requestURI)) {
-            log.info("Checking whitelist for URI: " + requestURI);  // URI 출력
+            log.info("Checking whitelist for URI: " + requestURI);
 
 
             HttpSession session = httpRequest.getSession(false);
 
 
-            if (session == null || session.getAttribute("sessionKey") == null) {
+            if (session == null || session.getAttribute("loginAuthor") == null) {
                 throw new RuntimeException("login please.");
             }
 

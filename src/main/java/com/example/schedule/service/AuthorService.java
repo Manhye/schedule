@@ -94,6 +94,13 @@ public class AuthorService {
     public LoginResponseDto login(String email, String password) {
         Author author = authorRepository.findIdByEmailAndPassword(email, password);
 
+        if(author == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Email");
+        }
+        if(!author.getPassword().equals(password)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect Password");
+        }
+
         return new LoginResponseDto(author.getId());
     }
 }
