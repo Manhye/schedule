@@ -8,6 +8,7 @@ import com.example.schedule.dto.UpdateCommentRequestDto;
 import com.example.schedule.entity.Author;
 import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
+import com.example.schedule.exception.ForbiddenException;
 import com.example.schedule.exception.NoContentException;
 import com.example.schedule.repository.AuthorRepository;
 import com.example.schedule.repository.CommentRepository;
@@ -104,7 +105,7 @@ public class CommentService {
 
     }
 
-    public void deleteComments(Long id, Long scheduleId, UpdateCommentRequestDto requestDto, HttpServletRequest request) {
+    public void deleteComments(Long id, HttpServletRequest request) {
         Comment foundComment = commentRepository.findById(id)
                 .orElseThrow(() -> new NoContentException("Comment Does Not Exist. ID = " + id));
         Author authorOfComment = authorRepository.findById(foundComment.getAuthor().getId())
@@ -119,7 +120,7 @@ public class CommentService {
         }
 
         if(!authorOfComment.getEmail().equals(email)){
-            throw new NoContentException("You are not authorized to delete this comment.");
+            throw new ForbiddenException("You are not authorized to delete this comment.");
         }
 
         commentRepository.delete(foundComment);
