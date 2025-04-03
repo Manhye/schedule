@@ -1,7 +1,6 @@
 package com.example.schedule.service;
 
 import com.example.schedule.common.Const;
-import com.example.schedule.config.PasswordEncoder;
 import com.example.schedule.dto.AuthorResponseDto;
 import com.example.schedule.dto.CreateScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
     private final AuthorRepository authorRepository;
     private final ScheduleRepository scheduleRepository;
-    private final PasswordEncoder passwordEncoder;
 
 
     public ScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto, HttpServletRequest request) {

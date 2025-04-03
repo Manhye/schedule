@@ -1,5 +1,6 @@
 package com.example.schedule.filter;
 
+import com.example.schedule.exception.ForbiddenException;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,7 +42,7 @@ public class LoginFilter implements Filter {
 
 
             if (session == null || session.getAttribute("loginAuthor") == null) {
-                throw new RuntimeException("login please.");
+                throw new ForbiddenException("login please.");
             }
 
             log.info("login success");
