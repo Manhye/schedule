@@ -1,6 +1,7 @@
 package com.example.schedule.controller;
 
 import com.example.schedule.dto.CreateScheduleRequestDto;
+import com.example.schedule.dto.PagingScheduleResponseDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.dto.UpdateScheduleRequestDto;
 import com.example.schedule.service.ScheduleService;
@@ -52,12 +53,12 @@ public class ScheduleController {
      *         with HTTP status 200 (OK).
      */
     @GetMapping
-    public ResponseEntity<Page<ScheduleResponseDto>> findAll(
+    public ResponseEntity<Page<PagingScheduleResponseDto>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size){
-        Page<ScheduleResponseDto> scheduleResponseDto = scheduleService.findAll(page, size);
+        Page<PagingScheduleResponseDto> pagingScheduleResponseDto = scheduleService.findAll(page, size);
 
-        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(pagingScheduleResponseDto, HttpStatus.OK);
     }
 
     /**

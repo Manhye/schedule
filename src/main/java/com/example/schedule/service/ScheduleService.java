@@ -1,15 +1,13 @@
 package com.example.schedule.service;
 
 import com.example.schedule.common.Const;
-import com.example.schedule.dto.AuthorResponseDto;
-import com.example.schedule.dto.CreateScheduleRequestDto;
-import com.example.schedule.dto.ScheduleResponseDto;
-import com.example.schedule.dto.UpdateScheduleRequestDto;
+import com.example.schedule.dto.*;
 import com.example.schedule.entity.Author;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.exception.ForbiddenException;
 import com.example.schedule.exception.NoContentException;
 import com.example.schedule.repository.AuthorRepository;
+import com.example.schedule.repository.CommentRepository;
 import com.example.schedule.repository.ScheduleRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
     private final AuthorRepository authorRepository;
     private final ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
 
 
     public ScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto, HttpServletRequest request) {
@@ -62,12 +61,15 @@ public class ScheduleService {
                 );
     }
 
-    public Page<ScheduleResponseDto> findAll(int page, int size) {
+    public Page<PagingScheduleResponseDto> findAll(int page, int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "modified_at"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
-            return scheduleRepository.findAll(pageable)
-                .map(ScheduleResponseDto::new);
+        return scheduleRepository.findAll(pageable)
+                .map(schedule -> {
+                    Long comments = commentRepository.countByScheduleId(schedule.getId());
+                    return new PagingScheduleResponseDto(schedule, comments); //
+                });
     }
 
     public ScheduleResponseDto findById(Long id) {

@@ -22,12 +22,6 @@ public class ScheduleResponseDto {
 
     private String email;
 
-    public  ScheduleResponseDto(Schedule schedule){
-        this.id=schedule.getId();
-        this.title=schedule.getTitle();
-        this.contents=schedule.getContents();
-        this.scheduledDate=schedule.getScheduledDate();
-    }
 
 
 }
