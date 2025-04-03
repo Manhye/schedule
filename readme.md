@@ -1,6 +1,10 @@
-# Todolist
+# Schedule
 
-This project is to study how to use Spring Boot. Many people can save their info and Todolist with their email and password.
+This project is to study how to use Spring Boot based on JPA. Many people can save their info and schedule with their email and password. You can also saves comment of each schedule.
+Login is required to access on this service. Passwords are encoded with session.
+
+## ERD
+![img.png](ERD.png)
 
 ## REST API Specification
 
