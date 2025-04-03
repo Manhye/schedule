@@ -30,7 +30,15 @@ public class CommentService {
     private final ScheduleRepository scheduleRepository;
 
 
-    public CommentResponseDto createComment(Long id, CommentRequestDto requestDto, String email) {
+    public CommentResponseDto createComment(Long id, CommentRequestDto requestDto, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Object dto = session.getAttribute(Const.LOGIN_AUTHOR);
+
+        String email = null;
+        if(dto instanceof AuthorResponseDto){
+            email = ((AuthorResponseDto) dto).getEmail();
+        }
 
         Optional<Author> author = authorRepository.findByEmail(email);
 

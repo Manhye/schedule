@@ -7,7 +7,6 @@ import com.example.schedule.dto.CreateScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.dto.UpdateScheduleRequestDto;
 import com.example.schedule.entity.Author;
-import com.example.schedule.entity.Comment;
 import com.example.schedule.entity.Schedule;
 import com.example.schedule.exception.ForbiddenException;
 import com.example.schedule.exception.NoContentException;
@@ -20,12 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +30,18 @@ public class ScheduleService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public ScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto) {
-        Author foundAuthor = findAuthorByEmailOrElseThrow(requestDto.getEmail());
+    public ScheduleResponseDto createSchedule(CreateScheduleRequestDto requestDto, HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Object dto = session.getAttribute(Const.LOGIN_AUTHOR);
+
+        String email = null;
+
+        if(dto instanceof AuthorResponseDto){
+            email = ((AuthorResponseDto) dto).getEmail();
+        }
+
+        Author foundAuthor = findAuthorByEmailOrElseThrow(email);
 
         Schedule schedule = new Schedule(
                 requestDto.getTitle(),

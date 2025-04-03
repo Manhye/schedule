@@ -1,6 +1,5 @@
 package com.example.schedule.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -22,8 +21,5 @@ public class CreateScheduleRequestDto {
     @Future(message = "Scheduled Date must be in the future")
     private final LocalDate scheduledDate;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Not an email format")
-    private final String email;
 
 }

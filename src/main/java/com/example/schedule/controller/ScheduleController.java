@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/schedules")
 @RequiredArgsConstructor
@@ -23,9 +21,10 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(
-            @RequestBody @Valid CreateScheduleRequestDto requestDto
+            @RequestBody @Valid CreateScheduleRequestDto requestDto,
+            HttpServletRequest request
             ){
-        ScheduleResponseDto dto = scheduleService.createSchedule(requestDto);
+        ScheduleResponseDto dto = scheduleService.createSchedule(requestDto, request);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
