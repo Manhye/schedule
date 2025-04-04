@@ -34,7 +34,7 @@ public class ScheduleService {
 
         String email = null;
 
-        if(dto instanceof AuthorResponseDto){
+        if (dto instanceof AuthorResponseDto) {
             email = ((AuthorResponseDto) dto).getEmail();
         }
 
@@ -50,13 +50,13 @@ public class ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(savedSchedule.getId(),savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getScheduledDate(), foundAuthor.getEmail());
+        return new ScheduleResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getScheduledDate(), foundAuthor.getEmail());
 
     }
 
     private Author findAuthorByEmailOrElseThrow(String email) {
         return authorRepository.findByEmail(email)
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new NoContentException("Email Does not Exist. Email = " + email)
                 );
     }
@@ -91,7 +91,7 @@ public class ScheduleService {
         Object dto = session.getAttribute(Const.LOGIN_AUTHOR);
 
         String email = null;
-        if(dto instanceof AuthorResponseDto){
+        if (dto instanceof AuthorResponseDto) {
             email = ((AuthorResponseDto) dto).getEmail();
         }
 
@@ -100,7 +100,7 @@ public class ScheduleService {
                 .orElseThrow(() -> new NoContentException("ID Does Not Exist. ID = " + id));
 
         // Only the creator can delete the schedule.
-        if(!foundSchedule.getAuthor().getEmail().equals(email)){
+        if (!foundSchedule.getAuthor().getEmail().equals(email)) {
             throw new ForbiddenException(
                     "You are not authorized to delete this schedule."
             );
@@ -121,27 +121,27 @@ public class ScheduleService {
         Object dto = session.getAttribute(Const.LOGIN_AUTHOR);
 
         String email = null;
-        if(dto instanceof AuthorResponseDto){
+        if (dto instanceof AuthorResponseDto) {
             email = ((AuthorResponseDto) dto).getEmail();
         }
 
 
         // Only the creator can update the schedule.
-        if(!foundAuthor.getEmail().equals(email)){
+        if (!foundAuthor.getEmail().equals(email)) {
             throw new ForbiddenException(
                     "You are not authorized to update this schedule."
             );
         }
 
-        if(requestDto.getTitle() != null && !requestDto.getTitle().isBlank()){
+        if (requestDto.getTitle() != null && !requestDto.getTitle().isBlank()) {
             foundSchedule.setTitle(requestDto.getTitle());
         }
 
-        if(requestDto.getContents() != null && !requestDto.getContents().isBlank()){
+        if (requestDto.getContents() != null && !requestDto.getContents().isBlank()) {
             foundSchedule.setContents(requestDto.getContents());
         }
 
-        if(requestDto.getScheduledDate() != null){
+        if (requestDto.getScheduledDate() != null) {
             foundSchedule.setScheduledDate(requestDto.getScheduledDate());
         }
 

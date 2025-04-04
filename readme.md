@@ -1,6 +1,6 @@
 # Schedule
 
-This project is to study how to use Spring Boot based on JPA. Many people can save their info and schedule with their email and password. You can also saves comment of each schedule.
+This project is to study how to use Spring Boot based on JPA. Many people can save their info and schedule with their email and password. You can also save comments of each schedule.
 Login is required to access on this service. Passwords are encoded with session.
 
 ## ERD
@@ -43,7 +43,15 @@ Login is required to access on this service. Passwords are encoded with session.
 | PATCH  | /schedules/{scheduleId}/comments/{id} | {"comments":comments} | None                                                                                                | 200, 204      |
 | DELETE | /schedules/{scheduleId}/comments/{id} | None                  | None                                                                                                | 200, 204, 403 |
 
-### Notes
-- `{id}` and `{scheduleId}` are of type `long`.
-- Response status `200` indicates success, while `302` is for redirections.
-- DTOs should be properly validated using `@Valid` annotation in Spring Boot.
+
+### Author, Schedule, and Comment Relationship
+- Implemented `author` table to separate author details.
+- Authors have unique identifiers (IDs), and schedules reference them via `id` of `author`.
+- Modified query logic to search schedules by `id` of `author` and `comment`.
+
+
+---
+
+## Developer
+- Developer: Kibeom Park
+- Email: kibeom0806@gmail.com
